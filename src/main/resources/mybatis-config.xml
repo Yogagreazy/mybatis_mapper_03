@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--
+        引入外部的配置文件
+        resource 代表类路径资源
+        url：网络路径或者磁盘路径
+    -->
+    <properties resource="mybatis.properties"></properties>
+
+    <!--
+        开启全局驼峰命名规则
+    -->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"></setting>
+    </settings>
+
+    <!--
+        给类起别名 别名不区分大小写
+    -->
+    <typeAliases>
+        <typeAlias type="com.mybatis.beans.Employee" alias="emp"></typeAlias>
+    </typeAliases>
+
+    <!--
+        配置链接数据库信息
+    -->
+    <environments default="dev_mysql">
+        <environment id="dev_mysql">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"></property>
+                <property name="url" value="${jdbc.url}"></property>
+                <property name="username" value="${jdbc.username}"></property>
+                <property name="password" value="${jdbc.password}"></property>
+            </dataSource>
+        </environment>
+
+        <environment id="dev_oracle">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="driver" value="${orcl.driver}"></property>
+                <property name="url" value="${orcl.url}"></property>
+                <property name="username" value="${orcl.username}"></property>
+                <property name="password" value="${orcl.password}"></property>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!--
+        配置数据库类型
+    -->
+    <databaseIdProvider type="DB_VENDOR">
+        <property name="MySql" value="mysql"></property>
+        <property name="Oracle" value="oracle"></property>
+        <property name="SQL Server" value="sql server"></property>
+    </databaseIdProvider>
+    <!--
+               mapper：册一个sql 映射
+                   注册配置文件
+                       resource：引用类路径下的 sql 映射文件
+                           mapper/EmployeeMapper.xml
+                       url:引用网格路径或者磁盘路径下的 sql映射文件
+                           file:///var/com.mybatis.mappers/AuthorMapper.xml
+                   注册接口
+                   class；引用注册接口
+                       1、有 sql映射文件，映射文件名必须和接口同名，并且放在与接口同一目录下；
+                       2、没有 sql映射文件，所有的 sql都是利用注解写在接口上
+                       推荐：
+                           重要的，复杂的 Dao 接口我们来写 sql 映射文件
+                           不重要的，简单的，为了开发快快速使用注解
+   
+           -->
+    <!--单个文件注册-->
+    <!-- <mapper resource="/mapper/EmployeeMapper.xml"></mapper>
+    <!- -按类型注册-->
+    <!--<mapper class="com.atguigu.mybatis.mappers.EmployeeMapperAnnotation" />&ndash;&gt;-->
+
+    <!--批量注册-->
+    <!--<package name="com.mybatis.mappers"></package>-->
+    <mappers>
+        <mapper resource="mappers/EmployeeMapper.xml"></mapper>
+        <mapper resource="mappers/EmployeeMapperPlus.xml"></mapper>
+        <mapper resource="mappers/DepartmentMapper.xml"></mapper>
+        <mapper class="com.mybatis.mappers.EmployeeMapperAnnotation"></mapper>
+    </mappers>
+
+</configuration>
